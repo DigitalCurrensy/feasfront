@@ -1,3 +1,3 @@
-# Seats
-Envelope ingest → constraint workers (sun, comms, slope, energy) → gate → frontier → brief.
-A failed constraint aborts that site. It does not get painted green.
+# Agents
+
+Seats: sun, earth/relay, slope, science, empty set, one-pager. URS last.

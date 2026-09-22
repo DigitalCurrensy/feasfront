@@ -1,6 +1,5 @@
 # Waves
-W0: two published south-pole candidates, slope + published PSR flags.
-W1: own constraint table + infeasible example.
-W2: add Sun/Earth hours as inputs (do not rebuild a globe).
-W3: Pareto of 20 sites.
-W4: paid one-pager.
+
+W0 constraints in a table. W1 vehicle-class subscription. W2 named relay. W3 empty-set letter. W4 paid one-pager.
+
+No live SPICE. Not a globe. Distinct law.

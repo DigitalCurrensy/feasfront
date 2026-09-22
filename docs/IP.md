@@ -1,4 +1,5 @@
 # IP
-Own: constraint schema, frontier solver wiring, infeasibility brief.
-Do not own: LOLA, SPICE, site coordinates.
-Do not fork a GPL illumination GUI.
+
+Own: constraint gate, empty-set letter, freeze.
+
+Not own: LOLA LDEM, SPICE kernels, LROC NAC. Cite them.
