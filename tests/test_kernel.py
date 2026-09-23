@@ -75,6 +75,14 @@ class FrontierTests(unittest.TestCase):
         self.assertEqual(named["passers"], ["site-a"])
 
 
+
+class FiniteTests(unittest.TestCase):
+    def test_non_finite_is_missing(self) -> None:
+        scored = gate("nan", 1.0, float("nan"), 200.0, 20.0, 1.0, **LIMITS)
+        self.assertEqual(scored.fails, ["missing"])
+        self.assertFalse(scored.ok)
+
+
 if __name__ == "__main__":
     unittest.main()
 

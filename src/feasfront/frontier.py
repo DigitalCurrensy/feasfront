@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Owned constraint gate. Tiny on purpose."""
+import math
 from dataclasses import dataclass
 
 @dataclass
@@ -36,7 +37,10 @@ def gate(
     min_earth_hours: float,
     max_night_hours: float,
 ) -> SiteScore:
-    if None in (slope_deg, sun_hours, earth_hours, night_hours):
+    numbers = (slope_deg, sun_hours, earth_hours, night_hours, max_slope_deg, min_sun_hours, min_earth_hours, max_night_hours)
+    if None in (slope_deg, sun_hours, earth_hours, night_hours) or any(
+        not math.isfinite(n) for n in numbers if n is not None
+    ):
         return SiteScore(site_id=site_id, ok=False, fails=["missing"], science=science)
     fails: list[str] = []
     if slope_deg > max_slope_deg:
