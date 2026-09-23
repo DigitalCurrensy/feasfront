@@ -60,11 +60,14 @@ def main(argv: list[str] | None = None) -> int:
         for row in reader:
             slope = _optional_float(row.get("slope_deg"))
             if geometric:
-                lat = float(row["lat"])
-                lon = float(row["lon"])
-                sun = sun_hours(lat, lon, args.duration, horizon_deg=args.horizon)
-                earth = earth_hours(lat, lon, args.duration, horizon_deg=args.horizon)
-                night = night_hours(sun, args.duration)
+                try:
+                    lat = float(row["lat"])
+                    lon = float(row["lon"])
+                    sun = sun_hours(lat, lon, args.duration, horizon_deg=args.horizon)
+                    earth = earth_hours(lat, lon, args.duration, horizon_deg=args.horizon)
+                    night = night_hours(sun, args.duration)
+                except (TypeError, ValueError):
+                    sun = earth = night = None
             else:
                 sun = _optional_float(row.get("sun_hours"))
                 earth = _optional_float(row.get("earth_hours"))

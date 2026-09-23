@@ -21,6 +21,12 @@ import math
 SYNODIC_HOURS = 29.530588853 * 24.0
 
 
+def _finite(*values: float) -> None:
+    for value in values:
+        if not math.isfinite(value):
+            raise ValueError("bad number")
+
+
 def solar_elevation_deg(
     lat_deg: float,
     lon_deg: float,
@@ -28,6 +34,7 @@ def solar_elevation_deg(
     subsolar_lon_deg: float,
 ) -> float:
     lat = math.radians(lat_deg)
+    _finite(lat_deg, lon_deg, subsolar_lat_deg, subsolar_lon_deg)
     lon = math.radians(lon_deg)
     slat = math.radians(subsolar_lat_deg)
     slon = math.radians(subsolar_lon_deg)
@@ -48,6 +55,7 @@ def sun_hours(
     start_subsolar_lon_deg: float = 0.0,
     step_hours: float = 1.0,
 ) -> float:
+    _finite(lat_deg, lon_deg, duration_hours, horizon_deg, subsolar_lat_deg, start_subsolar_lon_deg, step_hours)
     if duration_hours <= 0 or step_hours <= 0:
         raise ValueError("not enough")
     hours = 0.0
@@ -79,6 +87,7 @@ def earth_hours(
     sub_earth_lat_deg: float = 0.0,
     sub_earth_lon_deg: float = 0.0,
 ) -> float:
+    _finite(lat_deg, lon_deg, duration_hours, horizon_deg, sub_earth_lat_deg, sub_earth_lon_deg)
     if duration_hours <= 0:
         raise ValueError("not enough")
     elevation = 90.0 - _central_angle_deg(lat_deg, lon_deg, sub_earth_lat_deg, sub_earth_lon_deg)
@@ -88,6 +97,7 @@ def earth_hours(
 
 
 def night_hours(sun: float, duration: float) -> float:
+    _finite(sun, duration)
     if sun < 0 or sun > duration:
         raise ValueError("not enough")
     return duration - sun

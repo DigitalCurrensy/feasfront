@@ -23,6 +23,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from feasfront.frontier import gate  # noqa: E402
+from feasfront.light import sun_hours  # noqa: E402
 from feasfront.letter import empty_letter, score_site  # noqa: E402
 
 LIMITS = dict(
@@ -83,8 +84,12 @@ class FiniteTests(unittest.TestCase):
         self.assertFalse(scored.ok)
 
 
-if __name__ == "__main__":
-    unittest.main()
+class BadCoordinateTests(unittest.TestCase):
+    def test_non_finite_latitude_is_not_zero_sun(self) -> None:
+        with self.assertRaises(ValueError) as ctx:
+            sun_hours(float("nan"), 0.0, 24.0)
+        self.assertEqual(str(ctx.exception), "bad number")
+
 
 
 from feasfront.light import SYNODIC_HOURS, earth_hours, solar_elevation_deg, sun_hours  # noqa: E402
@@ -103,3 +108,6 @@ class LightTests(unittest.TestCase):
         hours = sun_hours(0, 0, SYNODIC_HOURS, horizon_deg=0.0, step_hours=1.0)
         self.assertGreater(hours, 0.45 * SYNODIC_HOURS)
         self.assertLess(hours, 0.55 * SYNODIC_HOURS)
+
+if __name__ == "__main__":
+    unittest.main()
