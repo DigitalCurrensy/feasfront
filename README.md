@@ -1,32 +1,35 @@
 # FEASFRONT
 
-FEASFRONT takes a lander envelope and a list of sites and prints the sites that survive. If none survive, the empty set is the result.
+For a lander team that has to throw sites out before anyone calls a site selected.
 
 **Owner:** Digital Currensy Inc.
-**License:** Apache-2.0. Our code only. Cited maps and papers stay with their authors.
+**License:** Apache-2.0. Our code only. Cited data and papers stay with their authors.
+**Status:** Private until the owner publishes it.
 
 ## What it decides
 
-Pass, or out. A site must clear slope, illumination, time in Earth view, and night. Missing a limit is not a pass.
+Pass, or out. If nothing survives, the empty set is the result.
 
 ## The rule
 
-Slope, sun, Earth hours, night. Each limit is a gate. The first failure removes the site. An impossible envelope is allowed to return nothing.
+Slope, sun, time in Earth view, and night. Each limit is a gate. The first miss removes the site. An impossible envelope is allowed to return nothing.
 
 ## Worked cases
 
-Three envelopes against a named set of polar sites that live in this repository: a first operating envelope, a tight vehicle, and an ask that cannot be met. The names are the desk’s cases. They are not a NASA site selection.
+Three envelopes against named polar sites stored here: a first operating envelope, a tight vehicle, and an ask that cannot be met. These are not a NASA site selection.
 
 ## What it will not do
 
-- Paint a lighting globe and call it a landing site.
+- Paint a lighting map and call it a landing site.
 - Fill a missing limit with a guess.
 - Turn an empty list into a recommendation.
 
 ## Run
 
 ```
+git clone <this repo>
+cd feasfront
 PYTHONPATH=src python -m unittest tests.test_kernel
 ```
 
-Notes under `docs/` are the build record. This page is the description.
+Python 3.12. No third-party packages. The test is the demo.
