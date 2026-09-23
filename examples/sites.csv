@@ -1,0 +1,4 @@
+site_id,science,slope_deg,sun_hours,earth_hours,night_hours
+ridge,0.82,8,180,30,40
+wall,0.55,22,180,30,40
+gap,0.40,,90,4,200

@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "feasfront"
+version = "0.1.0"
+description = "Drop landing sites that miss slope, sun, Earth-view, or night limits."
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [{name = "Digital Currensy Inc."}]
+[tool.setuptools.packages.find]
+where = ["src"]

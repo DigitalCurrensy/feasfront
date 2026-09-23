@@ -23,6 +23,28 @@ class SiteScore:
     science: float
 
 
-def gate(site_id: str, science: float, constraints: dict[str, bool]) -> SiteScore:
-    fails = [name for name, passed in constraints.items() if not passed]
+def gate(
+    site_id: str,
+    science: float,
+    slope_deg: float | None,
+    sun_hours: float | None,
+    earth_hours: float | None,
+    night_hours: float | None,
+    *,
+    max_slope_deg: float,
+    min_sun_hours: float,
+    min_earth_hours: float,
+    max_night_hours: float,
+) -> SiteScore:
+    if None in (slope_deg, sun_hours, earth_hours, night_hours):
+        return SiteScore(site_id=site_id, ok=False, fails=["missing"], science=science)
+    fails: list[str] = []
+    if slope_deg > max_slope_deg:
+        fails.append("slope")
+    if sun_hours < min_sun_hours:
+        fails.append("sun")
+    if earth_hours < min_earth_hours:
+        fails.append("earth")
+    if night_hours > max_night_hours:
+        fails.append("night")
     return SiteScore(site_id=site_id, ok=not fails, fails=fails, science=science)

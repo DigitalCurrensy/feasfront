@@ -45,6 +45,34 @@ def empty_letter(ask: str, passers: list[str]) -> dict:
     }
 
 
-def score_site(site_id: str, science: float, sun_ok: bool, slope_ok: bool) -> dict:
-    s = gate(site_id, science, {"sun": sun_ok, "slope": slope_ok})
-    return {"site_id": s.site_id, "ok": s.ok, "fails": s.fails, "science": s.science}
+def score_site(
+    site_id: str,
+    science: float,
+    slope_deg: float | None,
+    sun_hours: float | None,
+    earth_hours: float | None,
+    night_hours: float | None,
+    *,
+    max_slope_deg: float,
+    min_sun_hours: float,
+    min_earth_hours: float,
+    max_night_hours: float,
+) -> dict:
+    scored = gate(
+        site_id,
+        science,
+        slope_deg,
+        sun_hours,
+        earth_hours,
+        night_hours,
+        max_slope_deg=max_slope_deg,
+        min_sun_hours=min_sun_hours,
+        min_earth_hours=min_earth_hours,
+        max_night_hours=max_night_hours,
+    )
+    return {
+        "site_id": scored.site_id,
+        "ok": scored.ok,
+        "fails": scored.fails,
+        "science": scored.science,
+    }

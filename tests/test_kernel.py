@@ -22,22 +22,57 @@ ROOT = Path(__file__).resolve().parents[1] / "src"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from feasfront.frontier import gate  # noqa: E402
 from feasfront.letter import empty_letter, score_site  # noqa: E402
+
+LIMITS = dict(
+    max_slope_deg=15.0,
+    min_sun_hours=100.0,
+    min_earth_hours=10.0,
+    max_night_hours=100.0,
+)
 
 
 class FrontierTests(unittest.TestCase):
-    def test_gate_and_empty_letter(self) -> None:
-        ok = score_site("faustini", 0.9, sun_ok=True, slope_ok=True)
-        self.assertTrue(ok["ok"])
-        dead = score_site("faustini", 0.9, sun_ok=False, slope_ok=True)
-        self.assertFalse(dead["ok"])
-        self.assertEqual(dead["fails"], ["sun"])
+    def test_all_four_pass(self) -> None:
+        scored = gate("ridge", 0.82, 15, 100, 10, 100, **LIMITS)
+        self.assertTrue(scored.ok)
+        self.assertEqual(scored.fails, [])
+        via_letter = score_site("ridge", 0.82, 8, 180, 30, 40, **LIMITS)
+        self.assertTrue(via_letter["ok"])
+        self.assertEqual(via_letter["fails"], [])
+        self.assertEqual(via_letter["science"], 0.82)
+
+    def test_slope_only(self) -> None:
+        scored = gate("wall", 0.55, 15.1, 100, 10, 100, **LIMITS)
+        self.assertFalse(scored.ok)
+        self.assertEqual(scored.fails, ["slope"])
+
+    def test_missing_measurement(self) -> None:
+        scored = gate("gap", 0.4, None, 0, 0, 999, **LIMITS)
+        self.assertFalse(scored.ok)
+        self.assertEqual(scored.fails, ["missing"])
+
+    def test_night_over_the_max(self) -> None:
+        scored = gate("dark", 0.5, 15, 100, 10, 100.1, **LIMITS)
+        self.assertFalse(scored.ok)
+        self.assertEqual(scored.fails, ["night"])
+
+    def test_every_limit_that_applies(self) -> None:
+        scored = gate("bad", 0.1, 16, 99, 9, 101, **LIMITS)
+        self.assertFalse(scored.ok)
+        self.assertEqual(scored.fails, ["slope", "sun", "earth", "night"])
+
+    def test_empty_set_of_sites(self) -> None:
         letter = empty_letter("impossible envelope", [])
+        self.assertEqual(letter["passers"], [])
         self.assertTrue(letter["empty"])
         self.assertFalse(letter["spice"])
         self.assertLessEqual(letter["words"], 80)
+        self.assertNotIn("recommend", letter["body"].lower())
         named = empty_letter("named passers", ["site-a"])
         self.assertFalse(named["empty"])
+        self.assertEqual(named["passers"], ["site-a"])
 
 
 if __name__ == "__main__":
