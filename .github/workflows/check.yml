@@ -10,5 +10,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install
+        run: pip install -e .
       - name: Kernel tests
-        run: PYTHONPATH=src python -m unittest tests.test_kernel
+        run: python -m unittest tests.test_kernel
+      - name: Example
+        run: python -m feasfront examples/sites.csv --max-slope 15 --min-sun 100 --min-earth 10 --max-night 100
