@@ -14,7 +14,7 @@ Pass, or out. If nothing survives, the empty set is a result. An empty passer li
 
 The caller can supply the hours. The desk can also compute them. Solar elevation uses sin(el) = sin(lat)sin(subsolar lat) + cos(lat)cos(subsolar lat)cos(lon difference). The subsolar longitude walks 360 degrees in 29.530588853 days. A step counts as sun when elevation is above the horizon. Earth hours are the whole duration when Earth elevation, 90 degrees minus the angle to the sub-Earth point, is above that horizon, and zero otherwise. Earth does not move. Night hours are the duration minus the sun hours. There is no terrain and no libration. The desk then applies the limits the caller names: maximum slope, minimum sun, minimum Earth view, and maximum night.
 
-A missing measurement, a non-finite hour, or a non-finite latitude or longitude fails the site as `missing` and does not add the other gates. Otherwise every limit the numbers miss is reported, in order: `slope`, `sun`, `earth`, `night`. The site is ok only when that list is empty.
+A missing measurement, a non-finite hour, or a non-finite latitude or longitude fails the site as `missing` and does not add the other gates. Otherwise every limit the numbers miss is reported, in order: `slope`, `sun`, `earth`, `night`. The site is ok only when that list is empty. The line prints hours=supplied and the four numbers when the file already contains them. hours=computed means the sun, Earth, and night figures were calculated, and the line also prints the horizon and step=1.
 
 ## Worked rows
 

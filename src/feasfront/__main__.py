@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 import sys
 from pathlib import Path
 
@@ -32,6 +33,14 @@ def _optional_float(text: str | None) -> float | None:
     if stripped == "":
         return None
     return float(stripped)
+
+
+def _show(value: float | None) -> str:
+    if value is None:
+        return "missing"
+    if not math.isfinite(value):
+        return "bad"
+    return f"{value:.10g}"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -86,9 +95,19 @@ def main(argv: list[str] | None = None) -> int:
             )
             word = "ok" if scored.ok else " ".join(scored.fails)
             if geometric:
-                print(f"{scored.site_id} {word} sun={sun:.6g} earth={earth:.6g} night={night:.6g}")
+                if sun is None or earth is None or night is None:
+                    print(f"{scored.site_id} {word} hours=bad")
+                else:
+                    print(
+                        f"{scored.site_id} {word} hours=computed sun={_show(sun)} "
+                        f"earth={_show(earth)} night={_show(night)} "
+                        f"horizon={_show(args.horizon)} step=1"
+                    )
             else:
-                print(f"{scored.site_id} {word}")
+                print(
+                    f"{scored.site_id} {word} hours=supplied slope={_show(slope)} "
+                    f"sun={_show(sun)} earth={_show(earth)} night={_show(night)}"
+                )
     return 0
 
 

@@ -109,5 +109,22 @@ class LightTests(unittest.TestCase):
         self.assertGreater(hours, 0.45 * SYNODIC_HOURS)
         self.assertLess(hours, 0.55 * SYNODIC_HOURS)
 
+
+class PrintedLineTests(unittest.TestCase):
+    def test_supplied_hours_are_on_the_line(self) -> None:
+        import subprocess
+        proc = subprocess.run(
+            [sys.executable, "-m", "feasfront", str(ROOT.parent / "examples" / "sites.csv"),
+             "--max-slope", "15", "--min-sun", "100", "--min-earth", "10", "--max-night", "100"],
+            cwd=ROOT.parent, env={**__import__("os").environ, "PYTHONPATH": str(ROOT)},
+            capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(
+            proc.stdout.splitlines()[0],
+            "ridge ok hours=supplied slope=8 sun=180 earth=30 night=40",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
