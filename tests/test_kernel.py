@@ -77,3 +77,21 @@ class FrontierTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+from feasfront.light import SYNODIC_HOURS, earth_hours, solar_elevation_deg, sun_hours  # noqa: E402
+
+
+class LightTests(unittest.TestCase):
+    def test_overhead_and_antipode(self) -> None:
+        self.assertAlmostEqual(solar_elevation_deg(0, 0, 0, 0), 90.0, places=6)
+        self.assertAlmostEqual(solar_elevation_deg(0, 180, 0, 0), -90.0, places=6)
+
+    def test_earth_is_fixed(self) -> None:
+        self.assertEqual(earth_hours(0, 0, 10), 10)
+        self.assertEqual(earth_hours(0, 180, 10), 0)
+
+    def test_equator_lunation_is_about_half_sun(self) -> None:
+        hours = sun_hours(0, 0, SYNODIC_HOURS, horizon_deg=0.0, step_hours=1.0)
+        self.assertGreater(hours, 0.45 * SYNODIC_HOURS)
+        self.assertLess(hours, 0.55 * SYNODIC_HOURS)

@@ -22,6 +22,7 @@ import sys
 from pathlib import Path
 
 from .frontier import gate
+from .light import earth_hours, night_hours, sun_hours
 
 
 def _optional_float(text: str | None) -> float | None:
@@ -43,6 +44,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-sun", type=float, required=True)
     parser.add_argument("--min-earth", type=float, required=True)
     parser.add_argument("--max-night", type=float, required=True)
+    parser.add_argument("--duration", type=float, default=24.0)
+    parser.add_argument("--horizon", type=float, default=0.0)
     args = parser.parse_args(argv)
     path = Path(args.csv_path)
     try:
@@ -52,23 +55,37 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     with handle:
         reader = csv.DictReader(handle)
+        fields = reader.fieldnames or []
+        geometric = "lat" in fields
         for row in reader:
+            slope = _optional_float(row.get("slope_deg"))
+            if geometric:
+                lat = float(row["lat"])
+                lon = float(row["lon"])
+                sun = sun_hours(lat, lon, args.duration, horizon_deg=args.horizon)
+                earth = earth_hours(lat, lon, args.duration, horizon_deg=args.horizon)
+                night = night_hours(sun, args.duration)
+            else:
+                sun = _optional_float(row.get("sun_hours"))
+                earth = _optional_float(row.get("earth_hours"))
+                night = _optional_float(row.get("night_hours"))
             scored = gate(
                 row["site_id"].strip(),
                 float(row["science"]),
-                _optional_float(row.get("slope_deg")),
-                _optional_float(row.get("sun_hours")),
-                _optional_float(row.get("earth_hours")),
-                _optional_float(row.get("night_hours")),
+                slope,
+                sun,
+                earth,
+                night,
                 max_slope_deg=args.max_slope,
                 min_sun_hours=args.min_sun,
                 min_earth_hours=args.min_earth,
                 max_night_hours=args.max_night,
             )
-            if scored.ok:
-                print(f"{scored.site_id} ok")
+            word = "ok" if scored.ok else " ".join(scored.fails)
+            if geometric:
+                print(f"{scored.site_id} {word} sun={sun:.6g} earth={earth:.6g} night={night:.6g}")
             else:
-                print(f"{scored.site_id} {' '.join(scored.fails)}")
+                print(f"{scored.site_id} {word}")
     return 0
 
 

@@ -15,6 +15,7 @@
 """FEASFRONT — polar lighting is a constraint inside the solver. It is not the app."""
 
 from .frontier import SiteScore, gate
+from .light import SYNODIC_HOURS, earth_hours, night_hours, solar_elevation_deg, sun_hours
 from .letter import empty_letter, score_site
 
-__all__ = ["SiteScore", "empty_letter", "gate", "score_site"]
+__all__ = ["SYNODIC_HOURS", "SiteScore", "earth_hours", "empty_letter", "gate", "night_hours", "score_site", "solar_elevation_deg", "sun_hours"]
