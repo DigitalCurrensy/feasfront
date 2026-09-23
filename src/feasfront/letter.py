@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from .frontier import gate
 
-OFFER = "vehicle-class one-pager $8k–$25k. Not an invoice."
+OFFER = "Unsigned. Not an invoice."
 BAND = (-90.0, -80.0)
 
 

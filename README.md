@@ -4,8 +4,6 @@ For a lander team that has to throw sites out before anyone calls a site selecte
 
 **Owner:** Digital Currensy Inc.
 **License:** Apache-2.0. Our code only. Cited data and papers stay with their authors.
-**Status:** Private until the owner publishes it.
-
 ## What it decides
 
 Pass, or out. If nothing survives, the empty set is the result.
