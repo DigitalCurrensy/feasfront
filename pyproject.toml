@@ -10,3 +10,6 @@ license = {text = "Apache-2.0"}
 authors = [{name = "Digital Currensy Inc."}]
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[project.scripts]
+feasfront = "feasfront.__main__:main"

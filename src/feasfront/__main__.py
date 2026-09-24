@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 from .frontier import gate
-from .light import earth_hours, night_hours, sun_hours
+from .record import finish
 
 
 def _optional_float(text: str | None) -> float | None:
@@ -55,6 +55,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-night", type=float, required=True)
     parser.add_argument("--duration", type=float, default=24.0)
     parser.add_argument("--horizon", type=float, default=0.0)
+    parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     path = Path(args.csv_path)
     try:
@@ -66,6 +67,8 @@ def main(argv: list[str] | None = None) -> int:
         reader = csv.DictReader(handle)
         fields = reader.fieldnames or []
         geometric = "lat" in fields
+        lines: list[str] = []
+        words: list[str] = []
         for row in reader:
             slope = _optional_float(row.get("slope_deg"))
             if geometric:
@@ -96,19 +99,26 @@ def main(argv: list[str] | None = None) -> int:
             word = "ok" if scored.ok else " ".join(scored.fails)
             if geometric:
                 if sun is None or earth is None or night is None:
-                    print(f"{scored.site_id} {word} hours=bad")
+                    lines.append(f"{scored.site_id} {word} hours=bad")
                 else:
-                    print(
+                    lines.append(
                         f"{scored.site_id} {word} hours=computed sun={_show(sun)} "
                         f"earth={_show(earth)} night={_show(night)} "
                         f"horizon={_show(args.horizon)} step=1"
                     )
             else:
-                print(
+                lines.append(
                     f"{scored.site_id} {word} hours=supplied slope={_show(slope)} "
                     f"sun={_show(sun)} earth={_show(earth)} night={_show(night)}"
                 )
-    return 0
+            words.append(word.split()[0])
+    return finish(
+        "feasfront",
+        "Slope, sun, Earth hours, night. Empty is a result.",
+        lines,
+        args.json,
+        words,
+    )
 
 
 if __name__ == "__main__":

@@ -23,6 +23,41 @@ PYTHONPATH=src python -m feasfront examples/sites.csv --max-slope 15 --min-sun 1
 
 The rest of this file is the formula that command prints.
 
+## Record
+
+`--json` prints one object. The process exit code is that object's `exit`. 0 is a pass word (`ok`, `pass`, `scored`, `path`). 1 is a refusal. 2 means the file could not be read. `keep` is false. `absent` is what this output does not contain: a stamp, measured basin months, and the points inside a `.laz` file.
+
+This object is not WaterML and it is not a USGS response.
+
+```json
+{
+  "absent": [
+    "stamp",
+    "measured_months",
+    "laz_points"
+  ],
+  "desk": "feasfront",
+  "exit": 1,
+  "formula": "Slope, sun, Earth hours, night. Empty is a result.",
+  "keep": false,
+  "rows": [
+    {
+      "line": "ridge ok hours=supplied slope=8 sun=180 earth=30 night=40",
+      "word": "ok"
+    },
+    {
+      "line": "wall slope hours=supplied slope=22 sun=180 earth=30 night=40",
+      "word": "slope"
+    },
+    {
+      "line": "gap missing hours=supplied slope=missing sun=90 earth=4 night=200",
+      "word": "missing"
+    }
+  ],
+  "word": "slope"
+}
+```
+
 
 For a lander team that has to throw sites out before anyone calls a site selected.
 

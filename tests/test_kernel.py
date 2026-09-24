@@ -119,7 +119,7 @@ class PrintedLineTests(unittest.TestCase):
             cwd=ROOT.parent, env={**__import__("os").environ, "PYTHONPATH": str(ROOT)},
             capture_output=True, text=True, check=False,
         )
-        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.returncode, 1, proc.stderr)
         self.assertEqual(
             proc.stdout.splitlines()[0],
             "ridge ok hours=supplied slope=8 sun=180 earth=30 night=40",
