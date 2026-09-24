@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: If you use this library, cite the repository.
+title: feasfront
+abstract: Sun, Earth, and night hours from latitude and longitude on a flat horizon, then the slope limit you set.
+authors:
+  - name: Digital Currensy Inc.
+license: Apache-2.0
+repository-code: https://github.com/DigitalCurrensy/feasfront
