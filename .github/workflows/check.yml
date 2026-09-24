@@ -17,4 +17,4 @@ jobs:
       - name: Example
         run: python -m feasfront examples/sites.csv --max-slope 15 --min-sun 100 --min-earth 10 --max-night 100 || test $? -eq 1
       - name: Geometry
-        run: python -m feasfront examples/geometry.csv --max-slope 15 --min-sun 1 --min-earth 1 --max-night 24 --duration 24
+        run: python -m feasfront examples/geometry.csv --max-slope 15 --min-sun 1 --min-earth 1 --max-night 24 --duration 24 || test $? -eq 1
