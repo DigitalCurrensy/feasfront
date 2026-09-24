@@ -1,5 +1,29 @@
 # FEASFRONT
 
+[![check](https://github.com/DigitalCurrensy/feasfront/actions/workflows/check.yml/badge.svg)](https://github.com/DigitalCurrensy/feasfront/actions/workflows/check.yml)
+
+For a site planner who has a latitude, a longitude, and a slope limit.
+
+The command computes sun, Earth, and night hours on a flat horizon, then applies the limits you set. Hours you already counted are accepted. A missing hour is a refusal, not a zero.
+
+There is no terrain model and no libration.
+
+## Install
+
+```bash
+pip install -e .
+PYTHONPATH=src python -m unittest tests.test_kernel
+```
+
+## First command
+
+```bash
+PYTHONPATH=src python -m feasfront examples/sites.csv --max-slope 15 --min-sun 100 --min-earth 10 --max-night 100
+```
+
+The rest of this file is the formula that command prints.
+
+
 For a lander team that has to throw sites out before anyone calls a site selected.
 
 **Owner:** Digital Currensy Inc.
