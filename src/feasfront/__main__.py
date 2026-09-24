@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 from .frontier import gate
+from .light import earth_hours, night_hours, sun_hours
 from .record import finish
 
 
